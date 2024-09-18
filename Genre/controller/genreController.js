@@ -17,8 +17,8 @@ class GenreController {
 
     async delete(req,res, next){
         try{
-            const {id} = req.query;
-            console.log(id);
+            const {id} = req.params;
+            console.log(id);q
             const genreDel = await Genre.destroy({where:{id}})
             res.status(200).json({genreDel})
         }
@@ -39,8 +39,8 @@ class GenreController {
 
     async getAll(req,res, next){
         try{
-            const types = await Genre.findAll()
-            res.status(200).json(types)
+            const genres = await Genre.findAll()
+            res.status(200).json(genres)
         }catch (err) {
             next(ApiError.badRequest(err.message))
         }
@@ -48,9 +48,11 @@ class GenreController {
     }
 
     async getOne(req,res, next){
-        try{
-
-        }catch (err) {
+        try {
+            const {id} = req.params;
+            const genre = await Genre.findOne({where: {id}})
+            res.status(200).json({genre})
+        } catch (err) {
             next(ApiError.badRequest(err.message))
         }
 

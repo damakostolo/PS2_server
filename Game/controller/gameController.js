@@ -1,40 +1,85 @@
-const uuid = require('uuid');
-const path = require('path');
 const ApiError = require("../errors/ApiErrors");
-const {Game} = require("../../models/models")
+const {Game , GameInfo} = require("../../models/models")
+const FileService = require("../service/fileService")
+const gameInfoController = require("./gameInfoController")
 
 class GameController{
 
     async create(req,res ,next){ // Корочу создаём "игру" и сохраняем её надо запелить ещё наверное провер но она уже есть на уровне бд
         try {
-            const {name, year, genreId , developerId, languageId} = req.body;
-            const {img} = req.file;
+            const {name, year, genreId, developerId, languageId, linkGame, description} = req.body;
+            const {img, imgGame} = req.files;
 
-            let fileName = uuid.v4() + ".jpg"; // генерация уникального имени для нашей картинки
-            img.mv = (path.resolve('__dirname', '..', 'static', fileName)) // а тут мы сохраняем в выбранную папку
+            const fileName = await FileService.uploadFile(img) // обращаемся к сервис и он делает всё что надо сохраняет фото и возвращает название
+            const game = await Game.create({name, year, genreId, developerId, languageId, img: fileName})// Тут создаём игру
 
-            const game = await Game.create({name, year, genreId, developerId, languageId, img: fileName})
+            const gameInfo = await gameInfoController.createInfo(imgGame, linkGame , description , game, next) // вынес логику создания инфы в соседный фаил
 
-            return res.status(200).json({game});
+            return res.status(200).json({game , gameInfo});
         }catch (err){
             next(ApiError.badRequest(err.message))
         }
 
     }
 
-    async delete(req,res){
-
+    async delete(req,res, next){
+        try {
+            const {id} = req.params;
+            const gameDel = await Game.destroy({where: {id}})
+            res.status(200).json({gameDel})
+        } catch (err) {
+            next(ApiError.badRequest(err.message))
+        }
     }
 
-    async update(req,res){
+    async update(req,res, next){
+        try {
+            const {id} = req.params;
 
+            const {name, year, genreId, developerId, languageId, linkGame, description} = req.body;
+            const {img, imgGame} = req.files;
+
+            if(linkGame || description || imgGame){
+                // тут будет импорт из класс файла где я буду тскать игру по айди и находить связаную с ней игру  через запросс и обновлять уже там
+            }
+
+            const fileName = await FileService.uploadFile(img) // обращаемся к сервис и он делает всё что надо сохраняет фото и возвращает название
+
+            const gameUp = await Game.update(
+                {
+                    name: name,
+                    year: year,
+                    genreId: genreId,
+                    developerId: developerId,
+                    languageId: languageId,
+                    img: fileName,
+                },
+                {where: {id}})
+
+            res.status(200).json({gameUp})
+
+        }catch (err){
+            next(ApiError.badRequest(err.message))
+        }
     }
 
-    async getAll(req,res){
-        res.send('game');
+    async getAll(req,res, next){
+        try {
+            const games = await Game.findAll();
+            return res.status(200).json({games});
+        }catch (err){
+            next(ApiError.badRequest(err.message))
+        }
     }
 
-    async getOne(req,res){
+    async getOne(req,res , next){
+        try {
+            const {id} = req.params;
+            const game = await Game.findOne({where:{id}});
+            return res.status(200).json({game});
+        }catch (err){
+            next(ApiError.badRequest(err.message))
+        }
 
     }
 

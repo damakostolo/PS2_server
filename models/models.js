@@ -6,7 +6,7 @@ const User = sequelize.define("user", {
     login:{type: DataTypes.STRING, unique: true},
     email:{type: DataTypes.STRING, unique: true},
     password: {type: DataTypes.STRING},
-    role: {type: DataTypes.STRING, defaultValue: "USER"},
+    role: {type: DataTypes.JSON, defaultValue: "USER"},
     isActivated: {type: DataTypes.BOOLEAN, defaultValue: false},
     activatedLink: {type: DataTypes.STRING},
 })
@@ -28,8 +28,9 @@ const Game = sequelize.define("game", {
 
 const GameInfo = sequelize.define("game_info", {
     id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title:{type: DataTypes.STRING, allowNull: false},
+    link:{type: DataTypes.STRING, unicode: true},
     description:{type: DataTypes.STRING, allowNull: false},
+    imgGame:{type: DataTypes.JSON, allowNull: false}
 })
 
 const Genre = sequelize.define('genre', {
@@ -52,17 +53,9 @@ const Comments = sequelize.define("comments", {
     text:{type: DataTypes.STRING}
 })
 
-const LanguageGame = sequelize.define("language_game", {
-    id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-})
-
-const GenreGame = sequelize.define("genre_game", {
-    id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-})
 
 User.hasOne(Favorite)
 Favorite.belongsTo(User)
-Favorite.hasOne(User)
 
 User.hasMany(Comments)
 Comments.belongsTo(User)
@@ -70,20 +63,19 @@ Comments.belongsTo(User)
 Favorite.hasMany(FavoriteGame)
 FavoriteGame.belongsTo(Favorite)
 
-FavoriteGame.hasOne(Game)
-Game.belongsTo(FavoriteGame)
-Game.hasOne(Favorite)
+Game.hasOne(FavoriteGame)
+FavoriteGame.belongsTo(Game)
 
-Genre.belongsToMany(Game, {through: GenreGame })
-Game.belongsToMany(Genre, {through: GenreGame })
+Genre.hasMany(Game)
+Game.belongsTo(Genre)
 
 Developer.hasMany(Game)
 Game.belongsTo(Developer)
 
-Language.belongsToMany(Game, {through: LanguageGame })
-Game.belongsToMany(Language, {through: LanguageGame })
+Language.hasMany(Game)
+Game.belongsTo(Language)
 
-Game.hasMany(GameInfo)
+Game.hasMany(GameInfo, {as: 'info'})
 GameInfo.belongsTo(Game)
 
 GameInfo.hasMany(Comments)
