@@ -12,16 +12,16 @@ class AuthController {
             const candidateLogin = User.findOne({where: {login}}) // проверяем наличие пользывателя с таким ником
 
             if(candidateLogin){
-
+                next(ApiError.badRequest(err.message))
             }
 
             const candidateEmail = User.findOne({where: {email}}) // проверяем наличие пользывателя с таким email
 
             if(candidateEmail){
-
+                next(ApiError.badRequest(err.message))
             }
 
-            const passwordCrypto = await passwordService.crypto(password); // создание шифра пароля
+            //const passwordCrypto = await passwordService.crypto(password); // создание шифра пароля
 
             const user = await User.create({})
 
