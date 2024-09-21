@@ -4,15 +4,6 @@ const {User} = require("../../models/models")
 
 class UserController {
 
-    async create(req, res, next) {
-        try {
-            const {user} = req.body;
-            const lang = await User.create({language})
-            res.status(200).json({language})
-        } catch (err) {
-            next(ApiError.badRequest(err.message))
-        }
-    }
 
     async delete(req, res, next) {
         try {
@@ -27,20 +18,20 @@ class UserController {
 
     async update(req, res, next) {
         try {
-
+            // Ну как нужно как ну нах не надо
         } catch (err) {
             next(ApiError.badRequest(err.message))
         }
     }
 
     async getAll(req, res) {
-        const users = await User.findAll()
+        const users = await User.findAll() // Для статистики
         res.status(200).json(users)
     }
 
     async getOne(req, res, next) {
         try {
-            const {id} = req.params;
+            const {id} = req.params; //Для админки
             const user = await User.findOne({where: {id}})
             res.status(200).json({user})
         } catch (err) {
