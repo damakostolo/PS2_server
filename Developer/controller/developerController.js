@@ -1,5 +1,5 @@
 const uuid = require('uuid');
-const ApiError = require("../errors/ApiErrors");
+const ApiError = require("../../errors/ApiErrors");
 const {Developer} = require("../../models/models")
 
 class DeveloperController {
@@ -11,7 +11,7 @@ class DeveloperController {
             const developer = await Developer.create({name})
             res.status(200).json({developer})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -22,7 +22,7 @@ class DeveloperController {
             const developer = await Developer.destroy({where: {id}})
             res.status(200).json({developer})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err);
         }
     }
 
@@ -38,7 +38,7 @@ class DeveloperController {
 
             res.status(200).json({developerUp})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -53,7 +53,7 @@ class DeveloperController {
             const developer = await Developer.findOne({where: {id}})
             res.status(200).json({developer})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 }

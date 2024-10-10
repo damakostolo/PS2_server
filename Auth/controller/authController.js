@@ -1,33 +1,21 @@
-const ApiError = require("../errors/ApiErrors");
-const {User} = require("../../models/models")
-const passwordService = require("../service/passwordService");
+const ApiError = require("../../errors/ApiErrors");
+const authService = require("../service/authService");
 
 class AuthController {
 
 
-    async register(req, res, next) {
+    async registration(req, res, next) {
         try {
-            const {login, email , password} = req.params;
+            const {login, email , password} = req.body;
 
-            const candidateLogin = User.findOne({where: {login}}) // проверяем наличие пользывателя с таким ником
+            const userData = await authService.registration(login, email, password, next);
 
-            if(candidateLogin){
-                next(ApiError.badRequest(err.message))
-            }
+            res.cookie("refreshToken", userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
 
-            const candidateEmail = User.findOne({where: {email}}) // проверяем наличие пользывателя с таким email
+            res.status(200).json({userData})
 
-            if(candidateEmail){
-                next(ApiError.badRequest(err.message))
-            }
-
-            //const passwordCrypto = await passwordService.crypto(password); // создание шифра пароля
-
-            const user = await User.create({})
-
-            res.status(200).json({user})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -35,7 +23,7 @@ class AuthController {
         try {
             // Ну как нужно как ну нах не надо
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(e)
         }
     }
 
@@ -43,15 +31,17 @@ class AuthController {
         try {
             // Ну как нужно как ну нах не надо
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
     async activate (req, res, next) {
         try {
-            // Ну как нужно как ну нах не надо
+            const activationLink = req.params.link
+            await authService.activate(activationLink)
+            return res.redirect(process.env.CLIENT_URL)
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -59,7 +49,7 @@ class AuthController {
         try {
             // Ну как нужно как ну нах не надо
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 }

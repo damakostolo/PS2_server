@@ -10,8 +10,9 @@ class passwordService {
 
             return passwordCrypto;
 
-        }catch (e){
-            console.error(e);
+        }catch (err){
+            next(err);
+
         }
     }
 

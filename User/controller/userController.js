@@ -1,5 +1,5 @@
 const uuid = require('uuid');
-const ApiError = require("../errors/ApiErrors");
+const ApiError = require("../../errors/ApiErrors");
 const {User} = require("../../models/models")
 
 class UserController {
@@ -11,7 +11,7 @@ class UserController {
             const user = await User.destroy({where: {id}})
             res.status(200).json({user})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -20,7 +20,7 @@ class UserController {
         try {
             // Ну как нужно как ну нах не надо
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -35,7 +35,7 @@ class UserController {
             const user = await User.findOne({where: {id}})
             res.status(200).json({user})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 }

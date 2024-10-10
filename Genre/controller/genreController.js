@@ -1,4 +1,4 @@
-const ApiError = require("../errors/ApiErrors");
+const ApiError = require("../../errors/ApiErrors");
 const {Genre} = require("../../models/models")
 
 class GenreController {
@@ -10,7 +10,7 @@ class GenreController {
             const type = await Genre.create({name})
             res.status(200).json(type)
         }catch (err){
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
 
     }
@@ -23,7 +23,7 @@ class GenreController {
             res.status(200).json({genreDel})
         }
         catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
 
     }
@@ -32,7 +32,7 @@ class GenreController {
         try{
 
         }catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
 
     }
@@ -42,7 +42,7 @@ class GenreController {
             const genres = await Genre.findAll()
             res.status(200).json(genres)
         }catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
 
     }
@@ -53,7 +53,7 @@ class GenreController {
             const genre = await Genre.findOne({where: {id}})
             res.status(200).json({genre})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
 
     }

@@ -1,4 +1,4 @@
-const ApiError = require("../errors/ApiErrors");
+const ApiError = require("../../errors/ApiErrors");
 const {GameInfo} = require("../../models/models")
 const FileService = require("../service/fileService")
 

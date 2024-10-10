@@ -1,5 +1,5 @@
 const uuid = require('uuid');
-const ApiError = require("../errors/ApiErrors");
+const ApiError = require("../../errors/ApiErrors");
 const {Language} = require("../../models/models")
 
 class LanguageController {
@@ -11,7 +11,7 @@ class LanguageController {
             const lang = await Language.create({language})
             res.status(200).json({language})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -22,7 +22,7 @@ class LanguageController {
             const language = await Language.destroy({where: {id}})
             res.status(200).json({language})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -38,7 +38,7 @@ class LanguageController {
 
             res.status(200).json({languageUp})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -53,7 +53,7 @@ class LanguageController {
             const language = await Language.findOne({where: {id}})
             res.status(200).json({language})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 }

@@ -1,4 +1,5 @@
-const ApiError = require("../errors/ApiErrors");
+const ApiError = require("../../errors/ApiErrors");
+
 const {Game , GameInfo} = require("../../models/models")
 const FileService = require("../service/fileService")
 const gameInfoController = require("./gameInfoController")
@@ -17,7 +18,7 @@ class GameController{
 
             return res.status(200).json({game , gameInfo});
         }catch (err){
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
 
     }
@@ -28,7 +29,7 @@ class GameController{
             const gameDel = await Game.destroy({where: {id}})
             res.status(200).json({gameDel})
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -59,7 +60,7 @@ class GameController{
             res.status(200).json({gameUp})
 
         }catch (err){
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -68,7 +69,7 @@ class GameController{
             const games = await Game.findAll();
             return res.status(200).json({games});
         }catch (err){
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
     }
 
@@ -78,7 +79,7 @@ class GameController{
             const game = await Game.findOne({where:{id}});
             return res.status(200).json({game});
         }catch (err){
-            next(ApiError.badRequest(err.message))
+            next(err)
         }
 
     }

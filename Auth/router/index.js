@@ -3,7 +3,7 @@ const router = new Router();
 const authController = require('../controller/authController');
 
 
-router.post('/registration', authController.register) // блок регестрации и авторизации
+router.post('/registration', authController.registration) // блок регестрации и авторизации
 router.post('/login', authController.login)
 router.post('/logout', authController.logout)
 
