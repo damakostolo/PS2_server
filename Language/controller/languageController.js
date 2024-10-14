@@ -9,16 +9,15 @@ class LanguageController {
             const {language} = req.body;
             if (!language) next(ApiError.badRequest(err.message))
             const lang = await Language.create({language})
-            res.status(200).json({language})
+            res.status(200).json({lang})
         } catch (err) {
-            next(err)
+            next(`Така мове вже є`)
         }
     }
 
     async delete(req, res, next) {
         try {
             const {id} = req.params;
-            console.log(id)
             const language = await Language.destroy({where: {id}})
             res.status(200).json({language})
         } catch (err) {
@@ -43,8 +42,13 @@ class LanguageController {
     }
 
     async getAll(req, res) {
-        const languages = await Language.findAll()
-        res.status(200).json(languages)
+        try {
+            const languages = await Language.findAll()
+            res.status(200).json({languages})
+        } catch (err) {
+            next(err)
+        }
+
     }
 
     async getOne(req, res, next) {

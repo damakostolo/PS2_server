@@ -10,9 +10,8 @@ class passwordService {
 
             return passwordCrypto;
 
-        }catch (err){
-            next(err);
-
+        }catch (e){
+            throw ApiError.badReqest('Помилка хеша пароля');
         }
     }
 
