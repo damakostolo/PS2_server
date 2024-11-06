@@ -9,7 +9,8 @@ router.post('/registration',
     body('password').isLength({min:4, max: 16}),
     authController.registration) // блок регестрации и авторизации
 router.post('/login', authController.login)
-router.post('/logout', authController.logout)
+
+
 
 router.get('/activate/:link', authController.activate)
 router.get('/refresh', authController.refresh)
