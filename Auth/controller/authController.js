@@ -29,7 +29,10 @@ class AuthController {
     async login (req, res, next) {
         try {
             const {email, password} = req.body;
-            const userData = await authService.login(email, password)
+            const userData = await authService.login(email, password, next)
+            if(!userData){
+                return res.status(401)
+            }
             res.cookie("refreshToken", userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
             return res.status(200).json({userData})
         } catch (err) {
@@ -57,12 +60,25 @@ class AuthController {
         }
     }
 
-    async refresh (req, res, next) {
+    async refreshToken (req, res, next) {
         try {
-            // Ну как нужно как ну нах не надо
+            const {refreshToken} = req.cookie;
+            const userData = await authService.refresh(refreshToken)
+
+            res.cookie("refreshToken", userData.refreshAccessesToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
+
+            return res.status(200).json({userData})
         } catch (err) {
             next(err)
         }
+    }
+
+    async check (req, res, next) {
+        const {id} = req.query;
+        if(!id){
+            return next(ApiError.badRequest('Не знайдено Id'))
+        }
+        res.json(id)
     }
 }
 

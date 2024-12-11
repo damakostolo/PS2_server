@@ -4,6 +4,7 @@
     <inspection_tool class="ExceptionCaughtLocallyJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="JSCheckFunctionSignatures" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="JSConstantReassignment" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="JSDeprecatedSymbols" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="JSUnresolvedReference" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="JSVoidFunctionReturnValueUsed" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="NpmUsedModulesInstalled" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
@@ -11,5 +12,6 @@
       <option name="m_ignoreImmediatelyReturnedVariables" value="false" />
       <option name="m_ignoreAnnotatedVariables" value="false" />
     </inspection_tool>
+    <inspection_tool class="UnreachableCodeJS" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>

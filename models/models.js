@@ -9,7 +9,7 @@ const User = sequelize.define("user", {
     role: {type: DataTypes.JSON, defaultValue: "USER"},
     isActivated: {type: DataTypes.BOOLEAN, defaultValue: false},
     activatedLink: {type: DataTypes.STRING},
-    refreshToken: {type: DataTypes.STRING}
+    refreshToken: {type: DataTypes.TEXT}
 })
 
 const Favorite = sequelize.define("favorite", {
