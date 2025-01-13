@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(fileUpload({}))
 app.use(express.static(path.resolve(__dirname, 'static')))
-app.use("/ps2", router);
+app.use("/api", router);
 app.use(errorMiddleware)
 
 const start = async () => {

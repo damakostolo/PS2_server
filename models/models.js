@@ -39,14 +39,9 @@ const Genre = sequelize.define('genre', {
     name:{type: DataTypes.STRING, allowNull: false, unique: true}
 })
 
-const Developer = sequelize.define("developer", {
-    id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name:{type: DataTypes.STRING, allowNull: false, unique: true},
-})
-
 const Language = sequelize.define("language", {
     id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    language:{type: DataTypes.STRING, unique: true}
+    name:{type: DataTypes.STRING, unique: true}
 })
 
 const Comments = sequelize.define("comments", {
@@ -70,9 +65,6 @@ FavoriteGame.belongsTo(Game)
 Genre.hasMany(Game)
 Game.belongsTo(Genre)
 
-Developer.hasMany(Game)
-Game.belongsTo(Developer)
-
 Language.hasMany(Game)
 Game.belongsTo(Language)
 
@@ -89,7 +81,6 @@ module.exports = {
     Game,
     GameInfo,
     Genre,
-    Developer,
     Language,
     Comments
 }

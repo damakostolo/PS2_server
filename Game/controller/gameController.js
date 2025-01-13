@@ -1,5 +1,3 @@
-const ApiError = require("../../errors/ApiErrors");
-
 const {Game , GameInfo} = require("../../models/models")
 const FileService = require("../service/fileService")
 const gameInfoController = require("./gameInfoController")
@@ -77,13 +75,21 @@ class GameController{
         try {
             const {id} = req.params;
             const game = await Game.findOne({where:{id}});
-            return res.status(200).json({game});
+            const gameInfo = await GameInfo.findOne({where: {gameId: id}});
+            return res.status(200).json({game, gameInfo});
         }catch (err){
             next(err)
-        }
+        }}
 
-    }
-
+    async getGameGenre(req,res , next){
+        try {
+            const {id} = req.params;
+            const games = await Game.findAll({where:{genreId: id}});
+            return res.status(200).json({games});
+        }catch (err){
+            next(err)
+        }}
+    
 }
 
 module.exports= new GameController();
