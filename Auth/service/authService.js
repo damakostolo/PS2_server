@@ -33,7 +33,7 @@ class authService {
             const userDto = new UserDto(user) // получаем всю нужную инфу от юзера id, email , isActevated , role
             const tokens = tokenService.generateToken({...userDto}); // генерация токенов, база
             tokenService.saveToken(user.id, tokens.refreshToken, User); // сохраняем нашему позьзывателю рефреш токен
-
+            
             return {...tokens ,user: userDto};
 
         }catch (err){
@@ -75,30 +75,31 @@ class authService {
 
     async refresh(refreshToken){
         try{
-            console.log(refreshToken)
+      
             if(!refreshToken){
                 return next(ApiError.badRequest("Користувач не автаризован"))
             }
+            
+            const userData = await tokenService.validateRefreshToken(refreshToken); // Тут ошибка - исправил
 
-            const userData = tokenService.validateRefreshToken(refreshToken);
-            console.log(userData)
 
-            const tokenFromDb = tokenService.findToken(refreshToken);
-            console.log(tokenFromDb)
+            const tokenFromDb = tokenService.findToken(refreshToken); // находит
 
-            if(!tokenFromDb || !userData){
+            if(!tokenFromDb || !userData ){
                return  next(ApiError.badRequest("Користувач не автаризован"))
             }
             const user = await User.findOne({where: {id: userData.id}})
-            console.log(user)
+           
             const userDto = new UserDto(user)
-            console.log(userDto)
+            
             const tokens = tokenService.generateToken({...userDto}); // генерація токені
-            console.log(tokens)
+            
             tokenService.saveToken(user.id, tokens.refreshToken, User); // заберігаем рефреш токен
-            return {...tokens ,user: userDto};
-        }catch(e){
 
+            return {...tokens ,user: userDto};
+            
+        }catch(e){
+            
         }
     }
 
