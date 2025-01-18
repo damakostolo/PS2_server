@@ -89,6 +89,16 @@ class GameController{
         }catch (err){
             next(err)
         }}
+
+    async getGameName(req, res, next){
+        try {
+            const {name} = req.body;
+            const games = await Game.findAll({where:{name: name}});
+            return res.status(200).json({games});
+        }catch (err){
+            next(err)
+        }
+    }
     
 }
 

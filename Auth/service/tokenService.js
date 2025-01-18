@@ -38,9 +38,12 @@ class TokenService{
         }
     }
 
-    async deleteToken (token){
-        const tokenDate = await User.destroy({where: {refreshToken: token}});
-        return tokenDate;
+    async deleteToken(token) {
+        const tokenUpdate = await User.update(
+            { refreshToken: null }, // Очистить токен
+            { where: { refreshToken: token } }
+        );
+        return tokenUpdate;
     }
 
     async findToken (token){

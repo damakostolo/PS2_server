@@ -16,8 +16,12 @@ class AuthController {
             const {login, email , password} = req.body;
 
             const userData = await authService.registration(login, email, password, next);
+            
+            res.cookie('refreshToken', userData.refreshToken, {
+                httpOnly: true,
+                maxAge: 30 * 24 * 60 * 60 * 1000 // 30 дней
+            });
 
-            res.cookie("refreshToken", userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
 
             return res.status(200).json({userData})
 
@@ -30,10 +34,16 @@ class AuthController {
         try {
             const {email, password} = req.body;
             const userData = await authService.login(email, password, next)
+            
             if(!userData){
                 return res.status(401)
             }
-            res.cookie("refreshToken", userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
+            
+            res.cookie('refreshToken', userData.refreshToken, {
+                httpOnly: true,
+                maxAge: 30 * 24 * 60 * 60 * 1000 // 30 дней
+            });
+            
             return res.status(200).json({userData})
         } catch (err) {
             next(err)
@@ -42,9 +52,11 @@ class AuthController {
 
     async logout (req, res, next) {
         try {
-            const {refreshToken} = req.cookie;
-            const token = await userService.logout(refreshToken);
-            res.clearCokie("refreshToken");
+            const {refreshToken} = req.cookies;
+            const token = await authService.logout(refreshToken);
+            console.log(token);
+            res.clearCookie("refreshToken");
+            return res.json({token})
         } catch (err) {
             next(err)
         }
@@ -62,11 +74,15 @@ class AuthController {
 
     async refreshToken (req, res, next) {
         try {
+         
             const {refreshToken} = req.cookies;
             console.log(refreshToken)
+            
+            if(!refreshToken){
+                return res.status(201)
+            }
 
             const userData = await authService.refresh(refreshToken)
-            console.log(userData)
 
             res.cookie("refreshToken", userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
 
@@ -75,14 +91,7 @@ class AuthController {
             next(err)
         }
     }
-
-    async check (req, res, next) {
-        const {id} = req.query;
-        if(!id){
-            return next(ApiError.badRequest('Не знайдено Id'))
-        }
-        res.json(id)
-    }
+    
 }
 
 module.exports = new AuthController();
