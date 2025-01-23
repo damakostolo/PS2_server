@@ -1,4 +1,3 @@
-const uuid = require('uuid');
 const ApiError = require("../../errors/ApiErrors");
 const {Language} = require("../../models/models")
 
@@ -6,10 +5,10 @@ class LanguageController {
 
     async create(req, res, next) {
         try {
-            const {language} = req.body;
-            if (!language) next(ApiError.badRequest(err.message))
-            const lang = await Language.create({language})
-            res.status(200).json({lang})
+            const {name} = req.body;
+            if (!name) next(ApiError.badRequest(err.message))
+            const language = await Language.create({name})
+            res.status(200).json({language})
         } catch (err) {
             next(`Така мове вже є`)
         }
@@ -29,10 +28,10 @@ class LanguageController {
     async update(req, res, next) {
         try {
             const {id} = req.params;
-            const {language} = req.body;
+            const {name} = req.body;
 
             const languageUp = await Language.update(
-                {language: language},
+                {name: name},
                 {where: {id}})
 
             res.status(200).json({languageUp})

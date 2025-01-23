@@ -5,12 +5,12 @@ const checkRole = require('../../middlewares/checkRoleMiddleware');
 
 router.get('/game', GameController.getAll)
 router.get('/game/:id', GameController.getOne)
+router.get('/gameCount', GameController.getCount)
 
-router.get('/gameGenre/:id', GameController.getGameGenre)
 
 router.post('/gameSearch', GameController.getGameName)
 
-router.post('/game', checkRole('ADMIN'),GameController.create)
+router.post('/game',checkRole('ADMIN'),GameController.create)
 
 router.put('/game/:id', checkRole('ADMIN'),GameController.update)
 

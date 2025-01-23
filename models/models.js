@@ -41,7 +41,7 @@ const Genre = sequelize.define('genre', {
 
 const Language = sequelize.define("language", {
     id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name:{type: DataTypes.STRING, unique: true}
+    name:{type: DataTypes.STRING, unique: true}// изменил
 })
 
 const Comments = sequelize.define("comments", {
@@ -62,11 +62,13 @@ FavoriteGame.belongsTo(Favorite)
 Game.hasOne(FavoriteGame)
 FavoriteGame.belongsTo(Game)
 
-Genre.hasMany(Game)
-Game.belongsTo(Genre)
+// Genre <-> Game (many-to-many)
+Genre.belongsToMany(Game, { through: 'GameGenres' });
+Game.belongsToMany(Genre, { through: 'GameGenres' });
 
-Language.hasMany(Game)
-Game.belongsTo(Language)
+// Language <-> Game (many-to-many)
+Language.belongsToMany(Game, { through: 'GameLanguages' });
+Game.belongsToMany(Language, { through: 'GameLanguages' });
 
 Game.hasMany(GameInfo, {as: 'info'})
 GameInfo.belongsTo(Game)
