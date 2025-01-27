@@ -10,7 +10,7 @@ router.get('/gameCount', GameController.getCount)
 
 router.post('/gameSearch', GameController.getGameName)
 
-router.post('/game',checkRole('ADMIN'),GameController.create)
+router.post('/game',GameController.create)
 
 router.put('/game/:id', checkRole('ADMIN'),GameController.update)
 

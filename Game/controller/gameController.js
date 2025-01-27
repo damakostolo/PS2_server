@@ -1,4 +1,4 @@
-const {Game , GameInfo, Genre, Language} = require("../../models/models")
+const {Game , GameInfo, Genre, Language, Platform} = require("../../models/models")
 const FileService = require("../service/fileService")
 const gameInfoController = require("./gameInfoController")
 const {Op} = require("sequelize")
@@ -8,19 +8,23 @@ class GameController{
     async create(req,res ,next){ // Корочу создаём "игру" и сохраняем её надо запелить ещё наверное провер но она уже есть на уровне бд
         //Тут возможна хуйня
         try {
-            const {name, year, genreId, languageId, linkGame, description} = req.body;
+            const {name, year, genreId, languageId, platformId, linkGame, description} = req.body;
             const {img, imgGame} = req.files;
 
             const fileName = await FileService.uploadFile(img) // обращаемся к сервис и он делает всё что надо сохраняет фото и возвращает название
             const game = await Game.create({name, year, img: fileName})// Тут создаём игру
 
             // Додавання жанрів
-            const genres = await Genre.findAll({ where: { id: genreId.split(',').map(Number) } }); // Припустимо, жанри з id 1, 2, 3
+            const genres = await Genre.findAll({ where: { id: genreId.split(',').map(Number) } });
             await game.addGenres(genres);
             
             // Додавання мов
-            const languages = await Language.findAll({ where: { id: languageId.split(',').map(Number) } }); // Мови з id 1 і 4
+            const languages = await Language.findAll({ where: { id: languageId.split(',').map(Number) } });
             await game.addLanguages(languages);
+
+            // Додавання платформи
+            const platforms = await Platform.findAll({ where: { id: platformId.split(',').map(Number) } });
+            await game.addPlatform(platforms);
             
             const gameInfo = await gameInfoController.createInfo(imgGame, linkGame , description , game, next) // вынес логику создания инфы в соседный фаил
 
@@ -28,15 +32,15 @@ class GameController{
         }catch (err){
             next(err)
         }
-
     }
 
     async delete(req,res, next){
         try {
             const {id} = req.params;
-            const gameDel = await Game.destroy({where: {id}})
+            const game = await Game.destroy({where: { id },});
             const gameInfoDel = await GameInfo.destroy({where: {gameId: id}}) // тут надо проверить
-            res.status(200).json({gameDel, gameInfoDel})
+
+            res.status(200).json({game, gameInfoDel})
         } catch (err) {
             next(err)
         }
@@ -70,7 +74,7 @@ class GameController{
 
     async getAll(req,res, next){
         try { // доработать
-            let {limit, page, genreId, languageId} = req.query;
+            let {limit, page, genreId, languageId, platformId} = req.query;
             
             page = page || 1;
             limit = limit || 9;
@@ -131,6 +135,10 @@ class GameController{
                     {
                         model: Language,
                         through: { attributes: [] }, // Приховує проміжну таблицю GameLanguages
+                    },
+                    {
+                        model: Platform,
+                        through: { attributes: [] }, // Приховує проміжну таблицю GamePlatform
                     },
                 ],
             });

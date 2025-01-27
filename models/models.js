@@ -29,8 +29,8 @@ const Game = sequelize.define("game", {
 
 const GameInfo = sequelize.define("game_info", {
     id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    link:{type: DataTypes.STRING, unicode: true},
-    description:{type: DataTypes.STRING, allowNull: false},
+    link:{type: DataTypes.TEXT, unicode: true},
+    description:{type: DataTypes.TEXT, allowNull: false},
     imgGame:{type: DataTypes.JSON, allowNull: false}
 })
 
@@ -40,6 +40,11 @@ const Genre = sequelize.define('genre', {
 })
 
 const Language = sequelize.define("language", {
+    id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name:{type: DataTypes.STRING, unique: true}// изменил
+})
+
+const Platform = sequelize.define("platform", {
     id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name:{type: DataTypes.STRING, unique: true}// изменил
 })
@@ -70,6 +75,10 @@ Game.belongsToMany(Genre, { through: 'GameGenres' });
 Language.belongsToMany(Game, { through: 'GameLanguages' });
 Game.belongsToMany(Language, { through: 'GameLanguages' });
 
+// Platform <-> Game (many-to-many)
+Platform.belongsToMany(Game, { through: 'GamePlatform' });
+Game.belongsToMany(Platform, { through: 'GamePlatform' });
+
 Game.hasMany(GameInfo, {as: 'info'})
 GameInfo.belongsTo(Game)
 
@@ -84,5 +93,6 @@ module.exports = {
     GameInfo,
     Genre,
     Language,
+    Platform,
     Comments
 }

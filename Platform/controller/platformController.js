@@ -1,14 +1,14 @@
 const ApiError = require("../../errors/ApiErrors");
-const {Language} = require("../../models/models")
+const {Platform} = require("../../models/models")
 
-class LanguageController {
+class PlatformController {
 
     async create(req, res, next) {
         try {
             const {name} = req.body;
             if (!name) next(ApiError.badRequest(err.message))
-            const language = await Language.create({name})
-            res.status(200).json({language})
+            const platform = await Platform.create({name})
+            res.status(200).json({platform})
         } catch (err) {
             next(`Така мове вже є`)
         }
@@ -17,8 +17,8 @@ class LanguageController {
     async delete(req, res, next) {
         try {
             const {id} = req.params;
-            const language = await Language.destroy({where: {id}})
-            res.status(200).json({language})
+            const platform = await Platform.destroy({where: {id}})
+            res.status(200).json({platform})
         } catch (err) {
             next(err)
         }
@@ -30,11 +30,12 @@ class LanguageController {
             const {id} = req.params;
             const {name} = req.body;
 
-            const languageUp = await Language.update(
+            const platformUp = await Platform.update(
                 {name: name},
-                {where: {id}})
+                {where: {id}}
+            )
 
-            res.status(200).json({languageUp})
+            res.status(200).json({platformUp})
         } catch (err) {
             next(err)
         }
@@ -42,8 +43,8 @@ class LanguageController {
 
     async getAll(req, res) {
         try {
-            const languages = await Language.findAll()
-            res.status(200).json(languages)
+            const platforms = await Platform.findAll()
+            res.status(200).json(platforms)
         } catch (err) {
             next(err)
         }
@@ -53,13 +54,12 @@ class LanguageController {
     async getOne(req, res, next) {
         try {
             const {id} = req.params;
-            const language = await Language.findOne({where: {id}})
-            res.status(200).json({language})
+            const platform = await Platform.findOne({where: {id}})
+            res.status(200).json({platform})
         } catch (err) {
             next(err)
         }
     }
 }
 
-
-module.exports = new LanguageController();
+module.exports = new PlatformController();
