@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm installAqa
+RUN npm ci
 
 COPY . .
 
