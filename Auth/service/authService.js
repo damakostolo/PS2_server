@@ -4,7 +4,7 @@ const passwordService = require("./passwordService");
 const mailService = require("./mailService")
 const UserDto = require("../dtos/UserDto");
 const uuid = require('uuid');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const tokenService = require("./tokenService");
 
