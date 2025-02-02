@@ -1,6 +1,6 @@
 const Router = require('express');
 const router = new Router();
-const GameController = require('../controller/GameController');
+const GameController = require('../controller/gameController');
 const checkRole = require('../../middlewares/checkRoleMiddleware');
 
 router.get('/game', GameController.getAll)
