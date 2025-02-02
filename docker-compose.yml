@@ -26,13 +26,3 @@ services:
       - ./pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-
-  pgadmin:
-    container_name: pgadmin4_container
-    image: dpage/pgadmin4
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: teodaniil2@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: 1903
-    ports:
-      - "5050:80"
