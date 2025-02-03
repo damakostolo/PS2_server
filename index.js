@@ -14,7 +14,7 @@ PORT = process.env.PORT || 5001;
 const app = express();
 
 app.use(cors({
-    origin: 'https://jade-praline-fa7933.netlify.app', // Ваш клиентский домен
+    origin: process.env.CLIENT_URL, // Ваш клиентский домен
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Разрешает отправку cookies
 }));
