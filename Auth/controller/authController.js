@@ -41,7 +41,9 @@ class AuthController {
             
             res.cookie('refreshToken', userData.refreshToken, {
                 httpOnly: true,
-                maxAge: 30 * 24 * 60 * 60 * 1000 // 30 дней
+                maxAge: 30 * 24 * 60 * 60 * 1000, // 30 дней
+                secure: true,
+                sameSite: 'none'
             });
             
             return res.status(200).json({userData})
@@ -84,7 +86,14 @@ class AuthController {
 
             const userData = await authService.refresh(refreshToken)
 
-            res.cookie("refreshToken", userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
+            res.cookie("refreshToken",
+                userData.refreshToken,
+                {maxAge: 24*60*60*1000,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none'},
+
+                );
 
             return res.status(200).json({userData})
         } catch (err) {
