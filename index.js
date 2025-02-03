@@ -1,4 +1,5 @@
 require("dotenv").config();
+require('./models/models');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
@@ -6,7 +7,6 @@ const router = require('./router/index');
 const sequelize = require('./dbAdmin');
 const fileUpload = require('express-fileupload');
 const path = require('path');
-const model =require('./models/models');
 const errorMiddleware = require('./middlewares/error-middleware')
 
 PORT = process.env.PORT || 5001;
